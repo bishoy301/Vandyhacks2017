@@ -16,23 +16,41 @@ TRAIN_DIR = os.path.join("data", "train")
 
 #TEST_DIR = os.path.join()
 
-PATH_001 = os.path.join( DATA_DIR, "images", "images_001" ) 
-PATH_002 = os.path.join( DATA_DIR, "images", "images_002" ) 
-
-
-filenames = os.listdir(PATH_001)
-filenames2 = os.listdir(PATH_002)
-filenames.sort()
-filenames2.sort()
-
 FILENAME_COL = "Image Index"
 CLASS_COL = "Finding Labels"
 
+
+filenames = os.listdir(DATA_DIR)
+filenames.sort()
+
+for filename in tqdm(filenames):
+    class_label = df[df[FILENAME_COL].str.match(filename)][CLASS_COL].values[0]
+    if '|' in class_label:
+        class_label = class_label.split('|')[0]
+
+            
+    class_path = os.path.join(TRAIN_DIR, class_label)
+    
+    #if directory for class doesnt exist, make it
+    if not os.path.exists(class_path):
+        os.makedirs(class_path)
+    
+    shutil.move(os.path.join(DATA_DIR, filename), class_path)    
+
+'''
+#PATH_001 = os.path.join( DATA_DIR, "images", "images_001" ) 
+#PATH_002 = os.path.join( DATA_DIR, "images", "images_002" ) 
+
+
+#filenames = os.listdir(PATH_001)
+#filenames2 = os.listdir(PATH_002)
+#filenames.sort()
+#filenames2.sort()
 imagesPaths = [filenames, filenames2]
 
-for images in tqdm (imagesPaths):
+for images in imagesPaths:
     # loop through all filenames
-    for filename in images  :
+    for filename in tqdm(images):
 
         #for every row in data frame
         for row in  range(len(df[FILENAME_COL])) :
@@ -42,6 +60,8 @@ for images in tqdm (imagesPaths):
                 
                 #get class of file
                 class_label = df[CLASS_COL][row]
+                if '|' in class_label:
+                    class_label = class_label.split('|')[0]
                 
                 #make path for class label
                 #class_path = os.path.join(DATA_DIR, class_label)
@@ -53,9 +73,11 @@ for images in tqdm (imagesPaths):
                     os.makedirs(class_path)
         
                 # move file from PATH_00x to class_path herei
-                print(os.path.join(PATH_001, filename))
-                print(class_path)
-                shutil.copy( os.path.join(PATH_001, filename), class_path      )    
+                #print(os.path.join(PATH_001, filename))
+                #print(class_path)
+                shutil.copy(os.path.join(PATH_001, filename), class_path)    
+'''
+
 '''
 path = os.path.join( DATA_DIR, "images", "images_001" ) 
 #for each filename in the directory
