@@ -24,32 +24,18 @@ filenames = os.listdir(DATA_DIR)
 filenames.sort()
 
 for filename in tqdm(filenames):
+    class_label = df[df[FILENAME_COL].str.match(filename)][CLASS_COL].values[0]
+    if '|' in class_label:
+        class_label = class_label.split('|')[0]
 
-    #for every row in data frame
-    for row in  range(len(df[FILENAME_COL])) :
-
-        #find file in datafram
-        if filename.endswith( df[FILENAME_COL][row] ):
             
-            #get class of file
-            class_label = df[CLASS_COL][row]
-            if '|' in class_label:
-                class_label = class_label.split('|')[0]
-            
-            #make path for class label
-            #class_path = os.path.join(DATA_DIR, class_label)
-            
-            class_path = os.path.join(TRAIN_DIR, class_label)
-            
-            #if directory for class doesnt exist, make it
-            if not os.path.exists(class_path):
-                os.makedirs(class_path)
+    class_path = os.path.join(TRAIN_DIR, class_label)
     
-            # move file from PATH_00x to class_path herei
-            #print(os.path.join(PATH_001, filename))
-            #print(class_path)
-            #shutil.copy(os.path.join(PATH_001, filename), class_path)    
-            shutil.move(os.path.join(DATA_DIR, filename), class_path)    
+    #if directory for class doesnt exist, make it
+    if not os.path.exists(class_path):
+        os.makedirs(class_path)
+    
+    shutil.move(os.path.join(DATA_DIR, filename), class_path)    
 
 '''
 #PATH_001 = os.path.join( DATA_DIR, "images", "images_001" ) 
