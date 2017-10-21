@@ -7,10 +7,10 @@ from keras.layers.merge import add
 
 # Input Shape will be 1024 x 1024
 def convNeuralNet(input_shape, num_classes, lrate = 1e-3, weights = None):
-    input_img = Input(shape=(input_shape))
+    input_img = Input(shape=input_shape)
 
     # Reshape Layer
-    reshape = Reshape((input_shape, 1))(input_img)
+    reshape = Reshape(input_shape + (1,))(input_img)
 
     conv1 = Conv2D(32, (3,3), strides=(1,1), padding='same')(reshape)
 
@@ -40,7 +40,7 @@ def convNeuralNet(input_shape, num_classes, lrate = 1e-3, weights = None):
     # Dense output layer
     out = Dense(num_classes, activation='softmax')(conv2)
 
-    model = Model(inputs= reshape, outputs= out)
+    model = Model(inputs=input_img, outputs=out)
     if weights:
         model.load_weights(weights)
 
