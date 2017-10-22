@@ -11,9 +11,9 @@ def convNeuralNet(input_shape, num_classes, lrate = 1e-3, weights = None):
     input_img = Input(shape=input_shape)
 
     # Reshape Layer
-    reshape = Reshape(input_shape + (1,))(input_img)
+    # reshape = Reshape(input_shape + (1,))(input_img)
 
-    conv1 = Conv2D(16, (5,5), strides=(2,2), padding='same')(reshape)
+    conv1 = Conv2D(16, (5,5), strides=(2,2), padding='same')(input_img)
     init_pool = AveragePooling2D((7,7), strides=(4,4), padding='same')(conv1)
 
     # residual layer
