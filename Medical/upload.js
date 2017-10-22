@@ -1,9 +1,13 @@
 var express = require('express');
 var app = express();
 var fs = require("fs");
+var path = require('path');
+var getPixels = require("get-pixels");
 
 var bodyParser = require('body-parser');
 var multer = require('multer');
+
+
 
 app.use(express.static('images'));
 app.use(bodyParser.urlencoded({ extended: false}));
@@ -29,12 +33,24 @@ app.post('/file_upload', function (req, res) {
                     message:'File uploaded successfully', 
                     filename:req.file.originalname
                 };
+                app.set("view engine", "pug");
+                app.set("views", path.join(__dirname, "views"));
+                app.use("/static", express.static(path.join(__dirname)));
+                res.redirect(req.file.originalname)
+                getPixels(req.file.originalname, function(err, pixels) {
+                    if(err) {
+                        console.log("Bad image path")
+                        return
+                    }
+                    console.log("got pixels", pixels.shape.slice())
+                })
             }
             console.log(response);
             res.end(JSON.stringify(response));
         });
     });
 })
+
 
 var server = app.listen(8081, function () {
     var host = server.address().address
