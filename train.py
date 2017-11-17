@@ -1,3 +1,6 @@
+'''
+Main training script for the conv net
+'''
 import os
 import numpy as np
 from PIL import Image
